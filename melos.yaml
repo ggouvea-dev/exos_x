@@ -1,0 +1,4 @@
+name: exos_x
+
+packages:
+  - packages/**
