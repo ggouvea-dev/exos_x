@@ -1,3 +1,4 @@
+
 extension Dates on DateTime {
   String format(DateTimeFormat dateTimeFormat, {separator = "/", includeTime = false}) {
     final day = _safeIntToString(this.day);
@@ -35,4 +36,36 @@ enum DateTimeFormat {
   ddMMyyyy,
   yyyyMMdd,
   yyyyddMM
+}
+
+DateTime parseBrDate(String brDate) {
+  assert(brDate.contains('/'));
+  final splitedDate =_splitBrDate(brDate);
+  assert(!splitedDate[2].contains(':'));
+  assert(int.parse(splitedDate[1]) <= 12);
+  final day = int.parse(splitedDate[0]);
+  final month = int.parse(splitedDate[1]);
+  final year = int.parse(splitedDate[2]);
+  return DateTime(year, month, day);
+}
+
+DateTime parseBrDateTime(String brDate) {
+  assert(brDate.contains('/') && brDate.contains(':'));
+  final splitedDate = _splitBrDate(brDate);
+  assert(splitedDate[2].contains(':'));
+  final time = splitedDate[2].split(' ')[1].split(':');
+  assert(time.length >= 3);
+  final day = int.parse(splitedDate[0]);
+  final month = int.parse(splitedDate[1]);
+  final year = int.parse(splitedDate[2]);
+  final hour = int.parse(time[0]);
+  final minute = int.parse(time[1]);
+  final second = int.parse(time[2]);
+  return DateTime(year, month, day, hour, minute, second);
+}
+
+List<String> _splitBrDate(String brDate) {
+  final splitedDate = brDate.split('/');
+  assert(splitedDate.length == 3);
+  return splitedDate;
 }
