@@ -51,13 +51,13 @@ DateTime parseBrDate(String brDate) {
 
 DateTime parseBrDateTime(String brDate) {
   assert(brDate.contains('/') && brDate.contains(':'));
-  final splitedDate = _splitBrDate(brDate);
-  assert(splitedDate[2].contains(':'));
-  final time = splitedDate[2].split(' ')[1].split(':');
+  final splitedDate = _splitBrDateTime(brDate);
+  final date = splitedDate[0].split('/');
+  final time = splitedDate[1].split(':');
   assert(time.length >= 3);
-  final day = int.parse(splitedDate[0]);
-  final month = int.parse(splitedDate[1]);
-  final year = int.parse(splitedDate[2]);
+  final day = int.parse(date[0]);
+  final month = int.parse(date[1]);
+  final year = int.parse(date[2]);
   final hour = int.parse(time[0]);
   final minute = int.parse(time[1]);
   final second = int.parse(time[2]);
@@ -67,5 +67,11 @@ DateTime parseBrDateTime(String brDate) {
 List<String> _splitBrDate(String brDate) {
   final splitedDate = brDate.split('/');
   assert(splitedDate.length == 3);
+  return splitedDate;
+}
+
+List<String> _splitBrDateTime(String dateTime) {
+  final splitedDate = dateTime.split(' ');
+  assert(splitedDate.length == 2);
   return splitedDate;
 }

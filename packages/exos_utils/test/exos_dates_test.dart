@@ -2,7 +2,7 @@ import 'package:exos_utils/exos_utils.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
+  group('Validate format extension', () {
     final date = DateTime(2022, 12, 01, 10, 5, 25);
 
     test('Validate ddMMyyyy', () {
@@ -28,6 +28,20 @@ void main() {
     test('Validate yyyyddMM with time ( hour, minute, second )', () {
       final formatedDate = date.format(DateTimeFormat.yyyyddMM, includeTime: true);
       expect(formatedDate, '2022/01/12 10:05:25');
+    });
+  });
+  group('Validate parseBrDate', () {
+    final validDate = '01/12/2022';
+    test('Validate valid date', () {
+      final parsedDate = parseBrDate(validDate);
+      expect(parsedDate, DateTime(2022, 12, 01));
+    });
+  });
+  group('Validate parseBrDateTime', () {
+    final validDate = '01/12/2022 10:05:25';
+    test('Validate valid date', () {
+      final parsedDate = parseBrDateTime(validDate);
+      expect(parsedDate, DateTime(2022, 12, 01, 10, 5, 25));
     });
   });
 }
