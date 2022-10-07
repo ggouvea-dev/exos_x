@@ -39,29 +39,39 @@ enum DateTimeFormat {
 }
 
 DateTime parseBrDate(String brDate) {
-  assert(brDate.contains('/'));
-  final splitedDate =_splitBrDate(brDate);
-  assert(!splitedDate[2].contains(':'));
-  assert(int.parse(splitedDate[1]) <= 12);
-  final day = int.parse(splitedDate[0]);
-  final month = int.parse(splitedDate[1]);
-  final year = int.parse(splitedDate[2]);
-  return DateTime(year, month, day);
+  try {
+    assert(brDate.contains('/'));
+    final splitedDate = _splitBrDate(brDate);
+    assert(!splitedDate[2].contains(':'));
+    assert(int.parse(splitedDate[1]) <= 12);
+    final day = int.parse(splitedDate[0]);
+    final month = int.parse(splitedDate[1]);
+    if (month > 12) throw FormatException('Invalid date format');
+    final year = int.parse(splitedDate[2]);
+    return DateTime(year, month, day);
+  } catch (e) {
+    throw FormatException('Invalid date format');
+  }
 }
 
 DateTime parseBrDateTime(String brDate) {
-  assert(brDate.contains('/') && brDate.contains(':'));
-  final splitedDate = _splitBrDateTime(brDate);
-  final date = splitedDate[0].split('/');
-  final time = splitedDate[1].split(':');
-  assert(time.length >= 3);
-  final day = int.parse(date[0]);
-  final month = int.parse(date[1]);
-  final year = int.parse(date[2]);
-  final hour = int.parse(time[0]);
-  final minute = int.parse(time[1]);
-  final second = int.parse(time[2]);
-  return DateTime(year, month, day, hour, minute, second);
+  try {
+    assert(brDate.contains('/') && brDate.contains(':'));
+    final splitedDate = _splitBrDateTime(brDate);
+    final date = splitedDate[0].split('/');
+    final time = splitedDate[1].split(':');
+    assert(time.length >= 3);
+    final day = int.parse(date[0]);
+    final month = int.parse(date[1]);
+    if (month > 12) throw FormatException('Invalid date format');
+    final year = int.parse(date[2]);
+    final hour = int.parse(time[0]);
+    final minute = int.parse(time[1]);
+    final second = int.parse(time[2]);
+    return DateTime(year, month, day, hour, minute, second);
+  } catch (e) {
+    throw FormatException('Invalid date format');
+  }
 }
 
 List<String> _splitBrDate(String brDate) {

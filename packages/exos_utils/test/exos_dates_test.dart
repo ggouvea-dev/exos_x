@@ -32,16 +32,24 @@ void main() {
   });
   group('Validate parseBrDate', () {
     final validDate = '01/12/2022';
+    final invalidDate = '01/15/2022 10:05';
     test('Validate valid date', () {
       final parsedDate = parseBrDate(validDate);
       expect(parsedDate, DateTime(2022, 12, 01));
     });
+    test('Should throw formatException', () {
+      expect(() => parseBrDate(invalidDate), throwsFormatException);
+    });
   });
   group('Validate parseBrDateTime', () {
     final validDate = '01/12/2022 10:05:25';
+    final invalidDate = '01/15/2022 10:05';
     test('Validate valid date', () {
       final parsedDate = parseBrDateTime(validDate);
       expect(parsedDate, DateTime(2022, 12, 01, 10, 5, 25));
+    });
+    test('Should throw exception', () {
+      expect(() => parseBrDateTime(invalidDate), throwsFormatException);
     });
   });
 }
