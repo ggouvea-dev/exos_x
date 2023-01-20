@@ -1,4 +1,3 @@
-
 extension Dates on DateTime {
   String format(DateTimeFormat dateTimeFormat, {separator = "/", includeTime = false}) {
     final day = _safeIntToString(this.day);
@@ -9,10 +8,14 @@ extension Dates on DateTime {
         result = '$day$separator$month$separator$year';
         break;
       case DateTimeFormat.yyyyMMdd:
-       result = '$year$separator$month$separator$day';
-       break;
+        result = '$year$separator$month$separator$day';
+        break;
       case DateTimeFormat.yyyyddMM:
         result = '$year$separator$day$separator$month';
+        break;
+      case DateTimeFormat.ddMMyy:
+        final shortYear = _safeIntToString(year).split('');
+        result = '$day$separator$month$separator${shortYear[2]}${shortYear[3]}';
         break;
     }
     if (!includeTime) return result;
@@ -35,7 +38,8 @@ extension Dates on DateTime {
 enum DateTimeFormat {
   ddMMyyyy,
   yyyyMMdd,
-  yyyyddMM
+  yyyyddMM,
+  ddMMyy,
 }
 
 DateTime parseBrDate(String brDate) {
@@ -51,6 +55,22 @@ DateTime parseBrDate(String brDate) {
     return DateTime(year, month, day);
   } catch (e) {
     throw FormatException('Invalid date format');
+  }
+}
+
+DateTime? parseBrDateNullable(String brDate) {
+  try {
+    assert(brDate.contains('/'));
+    final splitedDate = _splitBrDate(brDate);
+    assert(!splitedDate[2].contains(':'));
+    assert(int.parse(splitedDate[1]) <= 12);
+    final day = int.parse(splitedDate[0]);
+    final month = int.parse(splitedDate[1]);
+    if (month > 12) return null;
+    final year = int.parse(splitedDate[2]);
+    return DateTime(year, month, day);
+  } catch (e) {
+    return null;
   }
 }
 
